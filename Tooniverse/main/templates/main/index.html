@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'main/css/global.css' %}">
+    {% block style %}{% endblock %}
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a class="logo" href="{% url 'home' %}"><img src="{% static 'main/images/logo.png' %}" alt="Logo" class="logo"></a>
+            <div class="centered-nav">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="{% url 'create' %}">Создание</a></li>
+                        <li><a href="{% url 'studios' %}">Студии</a></li>
+                        <li><a href="{% url 'cartoon' %}">Мультфильмы</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav mr-auto">
+                  {% if user.is_authenticated %}
+                  
+                  <li class="nav-item">
+                    <a class="nav-link" href="/logout">Выход</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Здраствуй, {{user.username}}</a>
+                  </li>
+            
+                  {% else %}
+            
+                  <li class="nav-item">
+                    <a class="nav-link" href="/login">Вход</a>
+                  </li>
+            
+                  {% endif %}
+                </ul>
+              </div>
+        </div>
+    </header>
+    {% block content %}
+
+    {% endblock %}
+    
+</body>
+</html>

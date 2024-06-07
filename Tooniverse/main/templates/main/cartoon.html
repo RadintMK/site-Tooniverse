@@ -1,0 +1,21 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block title %}Студии{% endblock %}
+
+{% block style %}<link rel="stylesheet" href="{% static 'main/css/studios.css' %}">{% endblock %}
+
+{% block content %}
+<h1>Самые известные советские мультфильмы</h1>
+<div class="content-container">
+    <div class="text-image-container">
+        <div class="text-block">
+            Title</br></br>
+            Text
+        </div>
+        <div class="image-container">
+            <img src="{% static 'main/images/1-6.jpg' %}" alt="Image">
+        </div>
+    </div>
+</div>
+{% endblock %}

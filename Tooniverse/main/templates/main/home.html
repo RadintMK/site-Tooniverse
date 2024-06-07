@@ -1,0 +1,64 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block title %}Главная{% endblock %}
+
+{% block style %}<link rel="stylesheet" href="{% static 'main/css/main.css' %}">{% endblock %}
+
+{% block content %}
+<div class="content-container">
+    <div class="text-image-container">
+        <div class="text-block">
+            Tooniverse — это ворота в мир анимации, где каждый клик оживляет истории. Здесь вы найдете уголок для общения с фанатами, узнаете секреты создания мультфильмов, познакомитесь с ведущими студиями и их творениями, а также сможете исследовать коллекцию величайших анимационных шедевров. Приглашаем вас в путешествие по яркому миру анимации на FrameFable!
+        </div>
+        <div class="image-container">
+            <img src="{% static 'main/images/orange.png' %}" alt="Orange Image">
+        </div>
+    </div>
+    <div class="chat-text-container">
+        <!-- Блок онлайн чата слева -->
+        <div class="chat-container">
+            <div id="chat-messages"></div>
+            <input type="text" id="chat-input" placeholder="Введите сообщение">
+            <button onclick="sendMessage()">Отправить</button>
+        </div>
+
+        <div class="text-container">
+            <div class="text-block">
+                Правила чата:</br>
+Уважение: Всегда общайтесь с уважением к другим участникам чата. Избегайте оскорблений или грубости.</br>
+Безопасность: Не раскрывайте личную информацию, такую как реальные имена, адреса, номера телефонов и т.д.</br>
+Контент: Делитесь только тем контентом, который подходит для всех возрастов. Избегайте материалов, которые могут быть неприемлемы для детей.</br>
+Язык: Используйте простой и понятный язык, избегайте сложных и непонятных выражений.</br>
+Помощь: Если у вас возникли проблемы или вопросы, обращайтесь к модераторам за помощью.</br>
+Веселье: Помните, что чат — это место для дружбы и веселья. Делитесь своими любимыми моментами из мультфильмов и находите новых друзей!</br>
+Приятного общения!
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var ws = new WebSocket(url, protocols);
+    var messagesContainer = document.getElementById('chat-messages');
+    var input = document.getElementById('chat-input');
+    
+    ws.onmessage = function(event) {
+        var messageData = JSON.parse(event.data);
+        var messageElement = document.createElement('p');
+        messageElement.textContent = messageData.message;
+        messagesContainer.appendChild(messageElement);
+    };
+    
+    function sendMessage() {
+        var messageInput = input;
+        var messageText = messageInput.value;
+    
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({message: messageText}));
+            messageInput.value = '';
+        } else {
+            console.error('WebSocket is closed.');
+        }
+    }
+    </script>
+{% endblock %}
