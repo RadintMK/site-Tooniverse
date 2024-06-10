@@ -8,14 +8,16 @@
 {% block content %}
 <h1>Основные студии нашего времени</h1>
 <div class="content-container">
+    {% for studio in studios %}
     <div class="text-image-container">
         <div class="text-block">
-            Title</br></br>
-            Text
+            {{ studio.name }}<br><br>
+            {{ studio.description }}
         </div>
         <div class="image-container">
-            <img src="{% static 'main/images/1-6.jpg' %}" alt="Image">
+            <img src="{{ studio.logo.url }}" alt="{{ studio.name }}">
         </div>
     </div>
+    {% endfor %}
 </div>
 {% endblock %}

@@ -12,4 +12,6 @@ urlpatterns = [
      path("register", register_request, name="register"),
      path("login", login_request, name="login"),
      path("logout", logout_request, name= "logout"),
+     path('send_message/', send_message, name='send_message'),
+     path('get_messages/', get_messages, name='get_messages'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

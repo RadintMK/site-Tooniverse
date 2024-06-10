@@ -8,14 +8,16 @@
 {% block content %}
 <h1>Самые известные советские мультфильмы</h1>
 <div class="content-container">
+    {% for cartoon in cartoons %}
     <div class="text-image-container">
         <div class="text-block">
-            Title</br></br>
-            Text
+            {{ cartoon.name }}<br><br>
+            {{ cartoon.description }}
         </div>
         <div class="image-container">
-            <img src="{% static 'main/images/1-6.jpg' %}" alt="Image">
+            <img src="{{ cartoon.poster_image.url }}" alt="{{ cartoon.name }}">
         </div>
     </div>
+    {% endfor %}
 </div>
 {% endblock %}

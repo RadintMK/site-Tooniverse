@@ -78,6 +78,12 @@ header {
     font-weight: 800;
     color: rgb(255, 255, 255);
 }
+
+.nav-link li a:hover{
+    background-color: #000000;
+    border-radius: 50px;
+}
+
 .profile-picture {
     margin-left: auto; 
     width: 50px;
@@ -112,8 +118,8 @@ header {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    width: 80%; /* Можно адаптировать под размер экрана */
-    max-width: 500px; /* Максимальная ширина */
+    width: 80%; 
+    max-width: 500px; 
 }
 
 .tab {
@@ -140,8 +146,4 @@ header {
     font-size: 2rem;
     transition: background-color 0.3s ease;
     white-space: nowrap;
-}
-.nav-link:hover {
-    background-color: #000000;
-    border-radius: 50px;
 }

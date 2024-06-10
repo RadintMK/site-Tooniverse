@@ -18,9 +18,12 @@
     <div class="chat-text-container">
         <!-- Блок онлайн чата слева -->
         <div class="chat-container">
-            <div id="chat-messages"></div>
-            <input type="text" id="chat-input" placeholder="Введите сообщение">
-            <button onclick="sendMessage()">Отправить</button>
+            <div id="chat-messages" class="chat-messages"></div>
+            <form id="chat-form" action="{% url 'send_message' %}" method="post">
+                {% csrf_token %}
+                <input type="text" id="chat-input" name="message" placeholder="Введите сообщение..." />
+                <button type="submit">Отправить</button>
+            </form>
         </div>
 
         <div class="text-container">
@@ -38,27 +41,60 @@
     </div>
 </div>
 <script>
-    var ws = new WebSocket(url, protocols);
-    var messagesContainer = document.getElementById('chat-messages');
-    var input = document.getElementById('chat-input');
+    document.addEventListener("DOMContentLoaded", function() {
+        var chatMessagesDiv = document.getElementById('chat-messages');
+        var loadedMessageIds = []; // Массив для хранения ID уже загруженных сообщений
     
-    ws.onmessage = function(event) {
-        var messageData = JSON.parse(event.data);
-        var messageElement = document.createElement('p');
-        messageElement.textContent = messageData.message;
-        messagesContainer.appendChild(messageElement);
-    };
-    
-    function sendMessage() {
-        var messageInput = input;
-        var messageText = messageInput.value;
-    
-        if (ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({message: messageText}));
-            messageInput.value = '';
-        } else {
-            console.error('WebSocket is closed.');
+        function loadMessages() {
+            let lastMessageId = loadedMessageIds.length > 0? Math.max(...loadedMessageIds) : 0;
+            fetch(`/get_messages/?since=${lastMessageId}`)
+               .then(response => response.json())
+               .then(data => {
+                    data.forEach(message => {
+                        if (!loadedMessageIds.includes(message.id)) {
+                            var messageElement = document.createElement('p');
+                            messageElement.innerHTML = `<strong>${message.author}:</strong> ${message.content}`;
+                            messageElement.style.marginBottom = '10px';
+                            messageElement.style.padding = '5px';
+                            messageElement.style.backgroundColor = '#e0e0e0';
+                            messageElement.style.borderRadius = '3px';
+                            chatMessagesDiv.appendChild(messageElement);
+                            loadedMessageIds.push(message.id);
+                        }
+                    });
+                })
+               .catch(error => console.error('Error loading messages:', error));
         }
-    }
-    </script>
+    
+        loadMessages();
+        setInterval(loadMessages, 1000);
+    });
+    document.getElementById('chat-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Предотвращает стандартное поведение формы
+    
+        var formData = new FormData(this); // Создает объект FormData из элемента формы
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}' 
+            },
+            credentials: 'include' 
+        })
+       .then(response => response.json())
+       .then(data => {
+            if (data.status === 'success') {
+
+                alert(data.message);
+
+            } else {
+
+                alert(data.message);
+            }
+        })
+       .catch((error) => {
+            console.error('Error:', error);
+        });
+    });
+</script>
 {% endblock %}
